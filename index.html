@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixelForge - Professional Image Editor</title>
+      <link href="/src/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-gray-900 text-white font-sans overflow-hidden">
+    <!-- Main Application Container -->
+    <div id="app" class="h-screen flex flex-col">
+      <!-- Top Menu Bar -->
+      <header class="bg-gray-800 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-2">
+            <h1 class="text-xl font-bold text-blue-400">PixelForge</h1>
+            <span class="text-xs text-gray-400">Pro</span>
+          </div>
+          
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-button" class="lg:hidden p-2 rounded hover:bg-gray-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+          
+          <!-- Desktop Navigation -->
+          <nav class="hidden lg:flex items-center space-x-1">
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="file">File</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="edit">Edit</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="image">Image</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="layer">Layer</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="filter">Filter</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="view">View</button>
+            <button class="menu-item px-3 py-1 rounded hover:bg-gray-700 text-sm" data-menu="help">Help</button>
+          </nav>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-50 lg:hidden">
+          <div class="fixed inset-0 bg-black bg-opacity-50" id="mobile-menu-backdrop"></div>
+          <div class="fixed top-0 right-0 h-full w-64 bg-gray-800 shadow-xl transform transition-transform">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+              <h2 class="text-lg font-semibold">Menu</h2>
+              <button id="mobile-menu-close" class="p-2 rounded hover:bg-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <nav class="p-4 space-y-2">
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="file">File</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="edit">Edit</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="image">Image</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="layer">Layer</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="filter">Filter</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="view">View</button>
+              <button class="menu-item w-full text-left px-3 py-2 rounded hover:bg-gray-700 text-sm" data-menu="help">Help</button>
+            </nav>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-sm text-gray-400" id="canvas-info">No document open</div>
+          <div class="flex items-center space-x-2">
+            <button id="zoom-out" class="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600">-</button>
+            <span id="zoom-level" class="text-sm min-w-12 text-center">100%</span>
+            <button id="zoom-in" class="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600">+</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dropdown Menus -->
+      <div id="dropdown-menus" class="relative z-50">
+        <!-- File Menu -->
+        <div id="file-menu" class="dropdown-menu bg-gray-800 border border-gray-600 rounded shadow-lg py-2 min-w-48">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="new">New... <span class="float-right text-gray-400">Ctrl+N</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="open">Open... <span class="float-right text-gray-400">Ctrl+O</span></button>
+          <hr class="border-gray-600 my-1">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="save">Save <span class="float-right text-gray-400">Ctrl+S</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="save-as">Save As... <span class="float-right text-gray-400">Ctrl+Shift+S</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="export">Export As...</button>
+          <hr class="border-gray-600 my-1">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="import">Import...</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="close">Close Tab</button>
+        </div>
+
+        <!-- Edit Menu -->
+        <div id="edit-menu" class="dropdown-menu bg-gray-800 border border-gray-600 rounded shadow-lg py-2 min-w-48">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="undo">Undo <span class="float-right text-gray-400">Ctrl+Z</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="redo">Redo <span class="float-right text-gray-400">Ctrl+Y</span></button>
+          <hr class="border-gray-600 my-1">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="cut">Cut <span class="float-right text-gray-400">Ctrl+X</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="copy">Copy <span class="float-right text-gray-400">Ctrl+C</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="paste">Paste <span class="float-right text-gray-400">Ctrl+V</span></button>
+          <hr class="border-gray-600 my-1">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="select-all">Select All <span class="float-right text-gray-400">Ctrl+A</span></button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="deselect">Deselect <span class="float-right text-gray-400">Ctrl+D</span></button>
+        </div>
+
+        <!-- Filter Menu -->
+        <div id="filter-menu" class="dropdown-menu bg-gray-800 border border-gray-600 rounded shadow-lg py-2 min-w-48">
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="blur">Blur</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="sharpen">Sharpen</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="brightness">Brightness/Contrast</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="hue-saturation">Hue/Saturation</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="invert">Invert</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="grayscale">Grayscale</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="sepia">Sepia</button>
+          <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-700" data-action="vintage">Vintage</button>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="flex-1 flex overflow-hidden">
+        <!-- Mobile Panel Toggle Buttons -->
+        <div class="lg:hidden fixed bottom-4 left-4 z-40 flex flex-col space-y-2">
+          <button id="toggle-tools" class="p-3 bg-gray-800 rounded-full shadow-lg border border-gray-600">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.47z"/>
+            </svg>
+          </button>
+          <button id="toggle-layers" class="p-3 bg-gray-800 rounded-full shadow-lg border border-gray-600">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Left Sidebar - Tools -->
+        <aside id="tools-panel" class="w-16 lg:w-16 bg-gray-800 border-r border-gray-700 flex flex-col transform lg:transform-none transition-transform duration-300 -translate-x-full lg:translate-x-0 fixed lg:relative z-30 h-full lg:h-auto">
+          <div class="p-2 space-y-1 overflow-y-auto">
+            <!-- Selection Tools -->
+            <div class="tool-group">
+              <button class="tool-btn active" data-tool="select" title="Move Tool (V)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 3l18 18M3 21V3l18 18H3z"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="marquee" title="Rectangular Marquee Tool (M)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="lasso" title="Lasso Tool (L)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 12c0-8-8-8-8 0s8 8 8 0"/>
+                  <path d="M12 12c0 8-8 8-8 0s8-8 8 0"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Drawing Tools -->
+            <div class="tool-group border-t border-gray-700 pt-2">
+              <button class="tool-btn" data-tool="brush" title="Brush Tool (B)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.5 2L20 7.5L14.5 13L9 7.5z"/>
+                  <path d="M9 7.5L5 11.5L2 14.5v3.5h3.5L8.5 15L12.5 11"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="pencil" title="Pencil Tool (P)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="eraser" title="Eraser Tool (E)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 21h10"/>
+                  <path d="M19 21v-8a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v8"/>
+                  <path d="M7 16l3-3 3 3"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="clone" title="Clone Stamp Tool (S)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="9" r="7"/>
+                  <path d="M15 15l6 6"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Shape Tools -->
+            <div class="tool-group border-t border-gray-700 pt-2">
+              <button class="tool-btn" data-tool="rectangle" title="Rectangle Tool (U)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="ellipse" title="Ellipse Tool">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="line" title="Line Tool">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="text" title="Text Tool (T)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="4,7 4,4 20,4 20,7"/>
+                  <line x1="9" y1="20" x2="15" y2="20"/>
+                  <line x1="12" y1="4" x2="12" y2="20"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Utility Tools -->
+            <div class="tool-group border-t border-gray-700 pt-2">
+              <button class="tool-btn" data-tool="eyedropper" title="Eyedropper Tool (I)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 22l1-1h3l9-9"/>
+                  <path d="M3 21v-3l9-9"/>
+                  <path d="M15 6l3-3 3 3-3 3-3-3"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="zoom" title="Zoom Tool (Z)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/>
+                  <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+              </button>
+              <button class="tool-btn" data-tool="hand" title="Hand Tool (H)">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 11v-1a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1"/>
+                  <path d="M14 10V9a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1"/>
+                  <path d="M10 9.5V8a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+                  <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8 2 2 0 1 1 4 0"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Color Swatches -->
+          <div class="mt-auto p-2 border-t border-gray-700">
+            <div class="color-swatch-container">
+              <div class="color-swatch-wrapper">
+                <div id="foreground-color" class="color-swatch bg-white border-2 border-gray-600" style="background-color: #000000;"></div>
+                <div id="background-color" class="color-swatch bg-gray-300 border-2 border-gray-600" style="background-color: #ffffff;"></div>
+              </div>
+              <button id="swap-colors" class="swap-colors-btn" title="Swap Colors (X)">⇄</button>
+              <button id="reset-colors" class="reset-colors-btn" title="Reset Colors (D)">⚪</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Canvas Area -->
+        <main class="flex-1 flex flex-col bg-gray-900">
+          <!-- Tab Bar -->
+          <div class="bg-gray-800 border-b border-gray-700">
+            <div id="tab-container" class="flex overflow-x-auto">
+              <button id="new-tab-btn" class="px-4 py-2 border-r border-gray-700 hover:bg-gray-700 text-gray-400">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Workspace -->
+          <div class="flex-1 relative overflow-auto bg-gray-900" id="canvas-container">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center text-gray-500">
+                <svg class="w-24 h-24 mx-auto mb-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21,15 16,10 5,21"/>
+                </svg>
+                <p class="text-lg mb-2">Welcome to PixelForge</p>
+                <p class="text-sm">Create a new document or open an existing file to get started</p>
+                <div class="mt-4 space-x-2">
+                  <button class="create-new-btn px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Create New</button>
+                  <button class="open-file-btn px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white">Open File</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside id="layers-panel" class="w-80 lg:w-80 bg-gray-800 border-l border-gray-700 flex flex-col transform lg:transform-none transition-transform duration-300 translate-x-full lg:translate-x-0 fixed lg:relative z-30 h-full lg:h-auto right-0 top-0">
+          <!-- Tool Options Panel -->
+          <div class="border-b border-gray-700">
+            <div class="p-4">
+              <h3 class="text-sm font-semibold mb-3">Tool Options</h3>
+              <div id="tool-options" class="space-y-3">
+                <!-- Brush Options -->
+                <div id="brush-options" class="tool-options">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-xs text-gray-400 mb-1">Size</label>
+                      <input type="range" id="brush-size" min="1" max="100" value="10" class="w-full">
+                      <span class="text-xs text-gray-400" id="brush-size-value">10px</span>
+                    </div>
+                    <div>
+                      <label class="block text-xs text-gray-400 mb-1">Opacity</label>
+                      <input type="range" id="brush-opacity" min="0" max="100" value="100" class="w-full">
+                      <span class="text-xs text-gray-400" id="brush-opacity-value">100%</span>
+                    </div>
+                    <div>
+                      <label class="block text-xs text-gray-400 mb-1">Hardness</label>
+                      <input type="range" id="brush-hardness" min="0" max="100" value="80" class="w-full">
+                      <span class="text-xs text-gray-400" id="brush-hardness-value">80%</span>
+                    </div>
+                    <div>
+                      <label class="block text-xs text-gray-400 mb-1">Flow</label>
+                      <input type="range" id="brush-flow" min="1" max="100" value="100" class="w-full">
+                      <span class="text-xs text-gray-400" id="brush-flow-value">100%</span>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <label class="block text-xs text-gray-400 mb-1">Blend Mode</label>
+                    <select id="brush-blend-mode" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm">
+                      <option value="normal">Normal</option>
+                      <option value="multiply">Multiply</option>
+                      <option value="screen">Screen</option>
+                      <option value="overlay">Overlay</option>
+                      <option value="soft-light">Soft Light</option>
+                      <option value="hard-light">Hard Light</option>
+                      <option value="color-dodge">Color Dodge</option>
+                      <option value="color-burn">Color Burn</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layers Panel -->
+          <div class="flex-1 flex flex-col border-b border-gray-700">
+            <div class="p-4 border-b border-gray-700">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-semibold">Layers</h3>
+                <div class="flex space-x-1">
+                  <button id="add-layer" class="p-1 hover:bg-gray-700 rounded" title="Add Layer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </button>
+                  <button id="duplicate-layer" class="p-1 hover:bg-gray-700 rounded" title="Duplicate Layer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                  </button>
+                  <button id="delete-layer" class="p-1 hover:bg-gray-700 rounded" title="Delete Layer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3,6 5,6 21,6"/>
+                      <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="block text-xs text-gray-400 mb-1">Blend Mode</label>
+                <select id="layer-blend-mode" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm">
+                  <option value="normal">Normal</option>
+                  <option value="multiply">Multiply</option>
+                  <option value="screen">Screen</option>
+                  <option value="overlay">Overlay</option>
+                  <option value="soft-light">Soft Light</option>
+                  <option value="hard-light">Hard Light</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Opacity</label>
+                <input type="range" id="layer-opacity" min="0" max="100" value="100" class="w-full">
+                <span class="text-xs text-gray-400" id="layer-opacity-value">100%</span>
+              </div>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+              <div id="layers-list" class="p-2 space-y-1">
+                <!-- Layers will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Panel -->
+          <div class="p-4">
+            <h3 class="text-sm font-semibold mb-3">Color</h3>
+            <div class="space-y-3">
+              <div class="color-picker-container">
+                <input type="color" id="color-picker" class="w-full h-12 rounded border border-gray-600">
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">H</label>
+                  <input type="number" id="hue" min="0" max="360" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm">
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">S</label>
+                  <input type="number" id="saturation" min="0" max="100" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm">
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">L</label>
+                  <input type="number" id="lightness" min="0" max="100" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm">
+                </div>
+              </div>
+              <div class="color-swatches grid grid-cols-8 gap-1">
+                <!-- Color swatches will be generated here -->
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- New Document Modal -->
+    <div id="new-document-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-lg font-semibold">Create New Document</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-4">
+            <label class="block text-sm text-gray-400 mb-1">Project Name</label>
+            <input type="text" id="new-doc-name" value="New Project" placeholder="Enter project name..." class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Width (px)</label>
+              <input type="number" id="new-doc-width" value="1920" min="1" max="8192" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Height (px)</label>
+              <input type="number" id="new-doc-height" value="1080" min="1" max="8192" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Resolution (DPI)</label>
+              <input type="number" id="new-doc-resolution" value="72" min="72" max="600" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Background Color</label>
+              <select id="new-doc-background" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:border-blue-500 focus:outline-none">
+                <option value="white">White</option>
+                <option value="transparent">Transparent</option>
+                <option value="black">Black</option>
+                <option value="gray">Gray</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="create-document-btn" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-medium transition-colors">Create</button>
+          <button id="cancel-document-btn" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white font-medium transition-colors">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filter-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-lg font-semibold" id="filter-title">Filter</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="filter-controls" class="space-y-4">
+            <!-- Filter controls will be dynamically generated -->
+          </div>
+          <div class="mt-4">
+            <label class="flex items-center">
+              <input type="checkbox" id="filter-preview" checked class="mr-2">
+              <span class="text-sm">Preview</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="apply-filter" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Apply</button>
+          <button class="modal-cancel px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden file input for opening files -->
+    <input type="file" id="file-input" accept="image/*" style="display: none;" multiple>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
