@@ -1,10 +1,32 @@
-# PixelForge
+<h1 align="center">PixelForge</h1>
+
+<p align="center">
+	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/last-commit/muhammad-fiaz/PixelForge" alt="last commit"/></a>
+	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/repo-size/muhammad-fiaz/PixelForge" alt="repo size"/></a>
+	<a href="https://github.com/muhammad-fiaz/PixelForge/issues"><img src="https://img.shields.io/github/issues/muhammad-fiaz/PixelForge" alt="issues"/></a>
+	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/license/muhammad-fiaz/PixelForge" alt="license"/></a>
+	<img src="https://img.shields.io/badge/TypeScript-5.8-blue.svg" alt="typescript"/>
+	<img src="https://img.shields.io/badge/bundler-Vite-brightgreen.svg" alt="vite"/>
+</p>
+
+<details>
+<summary><strong>Table of Contents</strong></summary>
+
+- [Quick start](#quick-start)
+- [Notes](#notes)
+- [Assumptions](#assumptions)
+- [Features implemented](#features-implemented)
+- [Run](#run)
+- [Structure](#structure)
+- [License](#license)
+
+</details>
 
 A fast, modular, vanilla TypeScript photo editor with layers, tools, filters, tabbed projects, export and theme toggle.
 
 Repository: https://github.com/muhammad-fiaz/PixelForge
 
-Quick start
+## Quick start
 
 Clone the repo and run the dev server:
 
@@ -15,15 +37,17 @@ npm install
 npm run dev
 ```
 
-Notes: the project uses Vite and TypeScript. If you use Bun you can run `bun run dev` or `bunx vite` per your environment.
+## Notes
 
-Assumptions:
+The project uses Vite and TypeScript. If you use Bun you can run `bun run dev` or `bunx vite` per your environment.
+
+## Assumptions
 
 - Runs fully in the browser with HTML5 Canvas, no server required.
 - TIFF/BMP export falls back to browser-supported encoders (PNG when unavailable).
 - Fonts available depend on the OS/browser; add webfonts if needed.
 
-Features implemented:
+## Features implemented
 
 - Tabs with multiple projects; Save Current, Save All (JSON project files)
 - Import images (PNG/JPEG/BMP/WEBP via browser support)
@@ -34,13 +58,13 @@ Features implemented:
 - Responsive UI, Lucide icons, GSAP intro animations
 - Theme toggle (light default)
 
-Run:
+## Run
 
 - Dev: `npm run dev` (or `bun run dev` / `bunx vite`)
 - Build: `npm run build`
 - Preview: `npm run preview`
 
-Structure:
+## Structure
 
 - src/types: data models
 - src/core: render engine and app store
@@ -49,3 +73,7 @@ Structure:
 - src/filters: image filters
 - src/file: import/export and serialization
 - src/ui: UI composition and event wiring
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
