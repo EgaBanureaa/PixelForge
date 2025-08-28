@@ -1,3 +1,6 @@
+<img width="1919" height="904" alt="preview" src="https://github.com/user-attachments/assets/9d3cce33-9fb2-4e4b-ae77-7e97c99bcf5e" />
+
+
 <h1 align="center">PixelForge</h1>
 
 <p align="center">
